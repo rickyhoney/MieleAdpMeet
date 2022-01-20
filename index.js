@@ -15,6 +15,13 @@ var meetname;
 var argomento;
 var datameet;
 var orameet;
+
+var a = true;
+
+const FIFO = require('fast-fifo');
+const q = new FIFO();
+
+
 apiServer.listen(port, host, () => {
     console.log("server connected at http://%s:%d", host, port);
 });
@@ -56,13 +63,15 @@ apiServer.get("/leggi", (req, res) => {
     
         const user = JSON.parse(data.toString());
     
+        var list = new ArrayList;
+            list.add([user]);
+
+
         console.log(user);
 
         res.send(user);
         
     });
-
-
 });
 
 //http://localhost:3000/disponibili
@@ -80,34 +89,63 @@ apiServer.get("/disponibili", (req, res) => {
         res.send(dispo);
         
     });
-
 });
 
-
 //http://localhost:3000/creazione?meetname=TPS&argomento=test&datameet=oggi&orameet=adesso
-apiServer.get("/creazione", (req, res) => {
+// apiServer.get("/provaconfronto", (req, res) => {
 
-    res.send(req.query.meetname 
-        + req.query.argomento
-        + req.query.datameet
-        + req.query.orameet);
+    res.send(req.query.name 
+            + req.query.surname
+            + req.query.login
+            + req.query.password);
 
-        const meet = {
-            "nome": req.query.meetname ,
-            "argomento":  req.query.argomento,
-            "data": req.query.datameet,
-            "ora": req.query.orameet
-        };
-
-        const data = JSON.stringify(meet);
-
-            fs.writeFile('meet.json', data, (err) => {
+            fs.readFile('studenti.json', 'utf-8', (err, data) => {
                 if (err) {
                     throw err;
                 }
-                console.log("JSON data is saved.");
+            
+                const user = JSON.parse(data.toString());
+            
+                
+                    q.push(user);
+                
+                while(a){
+
+                
+
+                    if(req.query.name == q.shift()){
+
+                        console.log("nome gia usato")
+
+                    } else{
+
+                    
+
+                    const utente = {
+                        "nome": req.query.name ,
+                        "cognome":  req.query.surname,
+                        "login": req.query.login,
+                        "password": req.query.password
+                    };
+
+                    const data = JSON.stringify(utente);
+
+                    fs.writeFile('studenti.json', data, (err) => {
+                        if (err) {
+                           console.log("err")
+                        }
+                    console.log("JSON data is saved.");
+
+                    });
+
+                    a=false;
+                }
+        
+                //console.log(user);
+        
+                //res.send(user);
+                       
+            }
+
             });
-
-
-
-});
+        });
