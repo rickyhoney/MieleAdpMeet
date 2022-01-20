@@ -65,7 +65,24 @@ apiServer.get("/leggi", (req, res) => {
 
 });
 
-apiServer.get("creazione", (req, res) => {
+apiServer.get("/disponibili", (req, res) => {
+
+    fs.readFile('meet.json', 'utf-8', (err, data) => {
+        if (err) {
+            throw err;
+        }
+    
+        const dispo = JSON.parse(data.toString());
+    
+        console.log(dispo);
+
+        res.send(dispo);
+        
+    });
+
+});
+
+apiServer.get("/creazione", (req, res) => {
 
     res.send(req.query.meetname 
         + req.query.argomento
@@ -74,9 +91,9 @@ apiServer.get("creazione", (req, res) => {
 
         const meet = {
             "nome": req.query.meetname ,
-            "cognome":  req.query.argomento,
-            "login": req.query.datameet,
-            "password": req.query.orameet
+            "argomento":  req.query.argomento,
+            "data": req.query.datameet,
+            "ora": req.query.orameet
         };
 
         const data = JSON.stringify(meet);
@@ -90,4 +107,4 @@ apiServer.get("creazione", (req, res) => {
 
 
 
-})
+});
