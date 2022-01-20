@@ -65,6 +65,7 @@ apiServer.get("/leggi", (req, res) => {
 
 });
 
+//http://localhost:3000/disponibili
 apiServer.get("/disponibili", (req, res) => {
 
     fs.readFile('meet.json', 'utf-8', (err, data) => {
@@ -82,6 +83,8 @@ apiServer.get("/disponibili", (req, res) => {
 
 });
 
+
+//http://localhost:3000/creazione?meetname=TPS&argomento=test&datameet=oggi&orameet=adesso
 apiServer.get("/creazione", (req, res) => {
 
     res.send(req.query.meetname 
