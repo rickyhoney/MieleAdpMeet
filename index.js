@@ -11,6 +11,10 @@ var surname;
 var login;
 var password;
 
+var meetname;
+var argomento;
+var datameet;
+var orameet;
 apiServer.listen(port, host, () => {
     console.log("server connected at http://%s:%d", host, port);
 });
@@ -42,7 +46,7 @@ apiServer.get("/nuovo", (req, res) => {
             
 });
 
-
+//http://localhost:3000/leggi
 apiServer.get("/leggi", (req, res) => {
 
     fs.readFile('studenti.json', 'utf-8', (err, data) => {
@@ -61,3 +65,29 @@ apiServer.get("/leggi", (req, res) => {
 
 });
 
+apiServer.get("creazione", (req, res) => {
+
+    res.send(req.query.meetname 
+        + req.query.argomento
+        + req.query.datameet
+        + req.query.orameet);
+
+        const meet = {
+            "nome": req.query.meetname ,
+            "cognome":  req.query.argomento,
+            "login": req.query.datameet,
+            "password": req.query.orameet
+        };
+
+        const data = JSON.stringify(meet);
+
+            fs.writeFile('meet.json', data, (err) => {
+                if (err) {
+                    throw err;
+                }
+                console.log("JSON data is saved.");
+            });
+
+
+
+})
