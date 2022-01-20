@@ -15,6 +15,7 @@ apiServer.listen(port, host, () => {
     console.log("server connected at http://%s:%d", host, port);
 });
 
+//http://localhost:3000/nuovo?name=riccardo&surname=miele&login=ricc&password=AAA
 apiServer.get("/nuovo", (req, res) => {
     res.send(req.query.name 
             + req.query.surname
@@ -39,5 +40,24 @@ apiServer.get("/nuovo", (req, res) => {
 
 
             
+});
+
+
+apiServer.get("/leggi", (req, res) => {
+
+    fs.readFile('studenti.json', 'utf-8', (err, data) => {
+        if (err) {
+            throw err;
+        }
+    
+        const user = JSON.parse(data.toString());
+    
+        console.log(user);
+
+        res.send(user);
+        
+    });
+
+
 });
 
